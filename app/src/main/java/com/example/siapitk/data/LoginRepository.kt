@@ -1,5 +1,6 @@
 package com.example.siapitk.data
 
+import ApiResponse
 import com.example.siapitk.data.model.LoggedInUser
 
 /**
@@ -27,15 +28,25 @@ class LoginRepository(val dataSource: LoginDataSource) {
         dataSource.logout()
     }
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun login(username: String, password: String, imei:String, callback: GetListUsersCallback) {
         // handle login
-        val result = dataSource.login(username, password)
 
-        if (result is Result.Success ) {
-            result.data?.let { setLoggedInUser(it) }
-        }
+        dataSource.login(username, password,imei, object : GetListUsersCallback {
+            override fun onSuccess(data: ApiResponse) {
+                callback.onSuccess(data)
+                data.loggedInUser?.get(0)?.let { setLoggedInUser(it) }
+            }
 
-        return result
+            override fun onFailed(errorMessage: String?) {
+                callback.onFailed(errorMessage)
+            }
+
+
+        })
+
+
+//
+//        return result
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

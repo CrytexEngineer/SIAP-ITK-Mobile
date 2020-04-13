@@ -1,13 +1,13 @@
 package com.example.siapitk.ui.login
 
+import ApiResponse
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
-import com.example.siapitk.data.LoginRepository
-import com.example.siapitk.data.Result
-
 import com.example.siapitk.R
+import com.example.siapitk.data.GetListUsersCallback
+import com.example.siapitk.data.LoginRepository
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 
@@ -17,16 +17,32 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String, imei:String) {
         // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
 
-        if (result is Result.Success ) {
-            _loginResult.value =
-                LoginResult(success = result.data?.MA_NamaLengkap?.let { LoggedInUserView(displayName = it) })
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
+        loginRepository.login(username, password, imei, object : GetListUsersCallback {
+            override fun onSuccess(data: ApiResponse) {
+                var loggedInUser = data.loggedInUser?.get(0)
+
+                if (loggedInUser != null) {
+                    _loginResult.value =
+                        LoginResult(success = loggedInUser?.MA_NamaLengkap?.let {
+                            LoggedInUserView(
+                                displayName = it
+                            )
+                        })
+                } else {
+                    _loginResult.value = LoginResult(error = data?.properties?.get(0)?.msg)
+                }
+            }
+
+            override fun onFailed(errorMessage: String?) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+
     }
 
     fun loginDataChanged(username: String, password: String) {
