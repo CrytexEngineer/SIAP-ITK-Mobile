@@ -1,6 +1,7 @@
 package com.example.siapitk.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.siapitk.MainActivity
 import com.example.siapitk.R
 
 
@@ -37,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
             Settings.Secure.ANDROID_ID
         )
 
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
+        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(application))
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -63,10 +65,9 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
+                startActivity(Intent(this,MainActivity::class.java))
             }
             setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
             finish()
         })
 

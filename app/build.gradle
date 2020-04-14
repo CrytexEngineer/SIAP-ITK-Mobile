@@ -14,7 +14,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "BASE_URL", "\"https://d5fa59ca.ngrok.io/api/v1/mobile/\""
+        buildConfigField "String", "BASE_URL", "\"https://fae7e7d0.ngrok.io/api/v1/mobile/\""
     }
 
     buildTypes {
@@ -69,4 +69,9 @@ dependencies {
     //QR
     implementation 'me.dm7.barcodescanner:zxing:1.9.8'
     implementation 'com.karumi:dexter:5.0.0'
+
+    //Storage
+    implementation "androidx.preference:preference-ktx:1.1.0"
+
+
 }

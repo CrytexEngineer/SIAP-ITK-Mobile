@@ -8,14 +8,14 @@ import com.google.gson.annotations.SerializedName
 data class LoggedInUser(
     @SerializedName("MA_NamaLengkap")
     var MA_NamaLengkap: String,
-    @SerializedName("MA_NRP_Baru")
-    var MA_NRP_Baru:String,
+//    @SerializedName("MA_Nrp'")
+    var MA_Nrp:Int,
     @SerializedName("MA_Nrp'")
-    var MA_Nrp: Int,
+    var MA_NRP_Baru:Int,
     @SerializedName("MA_Email")
     var MA_email: String,
     @SerializedName("MA_IMEI")
-    var MA_IMEI: Int
+    var MA_IMEI: String
 
 
 )

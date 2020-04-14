@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import com.example.siapitk.data.model.LoggedInUser
 import kotlinx.android.synthetic.main.activity_profile.*
 
@@ -15,7 +16,9 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         val apiRequetsViewModel = ViewModelProviders.of(this).get(ApiViewModel::class.java)
-        apiRequetsViewModel.getUserProfile(1116110003)
+        apiRequetsViewModel.getUserProfile(
+            PreferenceManager.getDefaultSharedPreferences(this).getInt("MA_Nrp", 0)
+        )
             .observe(this, Observer<ArrayList<LoggedInUser>> { t ->
 
                 t?.let {

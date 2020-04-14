@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import com.example.siapitk.Model.QRcode
 import com.example.siapitk.ViewModel.UtilsViewModel
 import com.google.gson.JsonParser
@@ -134,7 +135,7 @@ class QrScannerActivity : AppCompatActivity(), PermissionListener, ZXingScannerV
 
             var token = response.token?.get(0)?.token
             button.setOnClickListener(View.OnClickListener { it ->
-                registerMeeting(1116110022, token!!)
+                registerMeeting(PreferenceManager.getDefaultSharedPreferences(this).getInt("MA_Nrp",0), token!!)
                 popUpDialog.dismiss()
             })
 

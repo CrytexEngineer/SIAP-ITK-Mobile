@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layout_gravity="center"
     tools:context=".ProfileActivity">
 
     <TextView
@@ -22,7 +23,7 @@
         android:id="@+id/profile_ma_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Belum Diatur" />
+        tools:text="10161059@student.itk.ac.id" />
 
     <TextView
         android:id="@+id/profile_ma_imei"
@@ -34,6 +35,7 @@
         android:id="@+id/btn_profile_change_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         android:text="Ganti Password" />
 
 

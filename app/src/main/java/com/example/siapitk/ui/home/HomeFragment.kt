@@ -3,13 +3,13 @@ package com.example.siapitk.ui.home
 import ApiViewModel
 import Kelas
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.siapitk.R
@@ -34,9 +34,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showData(1116110003)
-
-
+        showData(PreferenceManager.getDefaultSharedPreferences(context).getInt("MA_Nrp", 0))
     }
 
 
@@ -48,7 +46,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun showData(MA_Nrp:Int) {
+    private fun showData(MA_Nrp: Int) {
         val apiRequetsViewModel = ViewModelProviders.of(this).get(ApiViewModel::class.java)
         apiRequetsViewModel.getKelas(MA_Nrp).observe(this, Observer<ArrayList<Kelas>> { t ->
 
