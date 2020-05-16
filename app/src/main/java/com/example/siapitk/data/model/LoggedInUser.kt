@@ -7,15 +7,13 @@ import com.google.gson.annotations.SerializedName
  */
 data class LoggedInUser(
     @SerializedName("MA_NamaLengkap")
-    var MA_NamaLengkap: String,
-//    @SerializedName("MA_Nrp'")
-    var MA_Nrp:Int,
-    @SerializedName("MA_Nrp'")
-    var MA_NRP_Baru:Int,
-    @SerializedName("MA_Email")
-    var MA_email: String,
+    var MA_NamaLengkap: String?,
+    var MA_Nrp: Int?,
+    var MA_NRP_Baru: Int?,
+    @SerializedName("email")
+    var MA_email: String?,
     @SerializedName("MA_IMEI")
-    var MA_IMEI: String
+    var MA_IMEI: String?
 
 
 )

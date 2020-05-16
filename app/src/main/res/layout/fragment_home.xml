@@ -5,12 +5,89 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.home.HomeFragment">
+    android:paddingHorizontal="24dp"
+    tools:context=".ui.home.HomeFragment"
+  >
 
+   <RelativeLayout
+      android:layout_marginTop="16dp"
+       android:layout_marginBottom="16dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+
+      <TextView
+          android:id="@+id/tv_home_user_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="18sp"
+          android:textStyle="bold"
+          android:fontFamily="@font/avenir"
+          tools:text="Muhammad Aqil Maulana" />
+
+   <TextView
+      android:id="@+id/tv_home_user_email"
+       android:layout_below="@id/tv_home_user_name"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:fontFamily="@font/sf_pro_regular"
+      android:textColor="#B8BCC6"
+       android:textSize="14sp"
+       tools:text="10161059@student.itk.ac.id"/>
+
+      <ImageView
+        android:id="@+id/btn_home_action_notification"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+          android:src="@drawable/ic_bell"
+          android:layout_marginEnd="16dp"
+          android:clickable="true"
+          android:foreground="?android:attr/selectableItemBackground"
+          android:layout_centerVertical="true"
+          android:layout_toLeftOf="@id/tv_home_user_picture"/>
+
+      <TextView
+          android:id="@+id/tv_home_user_picture"
+          android:layout_width="36dp"
+          android:layout_height="36dp"
+          android:background="@drawable/rounded_textview"
+       android:layout_centerVertical="true"
+          android:gravity="center"
+          android:textColor="@android:color/white"
+          android:layout_alignParentEnd="true"
+          android:textSize="20dp"
+          tools:text="M" />
+
+   </RelativeLayout>
+
+   <include layout="@layout/item_home_notification"/>
+
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:fontFamily="@font/avenir"
+       android:textSize="16dp"
+       android:visibility="gone"
+       android:layout_marginTop="48dp"
+       android:layout_marginBottom="16dp"
+       android:text="Jadwal Kuliah Hari Ini"
+       />
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/rv_matakuliah"
        android:layout_width="match_parent"
+       android:layout_height="122dp"
+       android:visibility="gone"
+       android:scrollbars="horizontal"/>
+
+   <TextView
+       android:layout_width="match_parent"
        android:layout_height="wrap_content"
-    />
+       android:fontFamily="@font/avenir"
+       android:textSize="16dp"
+       android:layout_marginTop="48dp"
+       android:layout_marginBottom="16dp"
+       android:text="Presensi Kehadiran"
+       />
+
+   <include layout="@layout/item_home_presence_highlight"/>
 
 </LinearLayout>

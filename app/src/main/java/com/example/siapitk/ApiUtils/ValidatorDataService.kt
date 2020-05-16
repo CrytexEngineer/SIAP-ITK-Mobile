@@ -1,4 +1,4 @@
-import com.example.siapitk.Model.QRcode
+import com.example.siapitk.data.model.QRcode
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Multipart
@@ -15,6 +15,6 @@ interface ValidatorDataService {
     @POST("validate/register_meeting")
     fun registerMeeting(
         @Part("MA_Nrp") MA_Nrp: Int,
-        @Part("PT_Token") PT_Token: Int
+        @Part("PT_Token") PT_Token: String
     ): Call<ApiResponse>
 }

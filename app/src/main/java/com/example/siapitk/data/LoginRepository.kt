@@ -3,7 +3,9 @@ package com.example.siapitk.data
 import ApiResponse
 import android.app.Application
 import androidx.preference.PreferenceManager
+import com.example.siapitk.data.localDataSource.LoginPreferences
 import com.example.siapitk.data.model.LoggedInUser
+import com.example.siapitk.data.remoteDataSource.LoginDataSource
 
 
 /**
@@ -31,10 +33,10 @@ class LoginRepository(val dataSource: LoginDataSource, var application: Applicat
         dataSource.logout()
     }
 
-    fun login(username: String, password: String, imei: String, callback: GetListUsersCallback) {
+    fun login(username: String, password: String, imei: String, callback: RemoteDataCallback) {
         // handle login
 
-        dataSource.login(username, password, imei, object : GetListUsersCallback {
+        dataSource.login(username, password, imei, object : RemoteDataCallback {
             override fun onSuccess(data: ApiResponse) {
                 callback.onSuccess(data)
                 data.loggedInUser?.get(0)?.let { setLoggedInUser(it) }
@@ -46,22 +48,50 @@ class LoginRepository(val dataSource: LoginDataSource, var application: Applicat
 
 
         })
-
-
-//
-//        return result
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
-        var userData = PreferenceManager.getDefaultSharedPreferences(application).edit();
-        userData.putString("MA_NamaLengkap", loggedInUser.MA_NamaLengkap)
-        userData.putInt("MA_NRP_Baru", loggedInUser.MA_NRP_Baru)
-        userData.putString("MA_email", loggedInUser.MA_email)
-        userData.putInt("MA_Nrp", loggedInUser.MA_Nrp)
-        userData.putString("MA_IMEI", loggedInUser.MA_IMEI)
-        userData.apply()
-
-
+        LoginPreferences(application).saveLogedInUser(loggedInUser)
     }
+
+
+     fun getLoggedInUser(): String? {
+      return LoginPreferences(application).getLoggedInUser()?.MA_NamaLengkap
+    }
+
+
+    fun ResetPassword(email: String, callback: RemoteDataCallback) {
+
+    dataSource.ResetPassword(email, object : RemoteDataCallback {
+        override fun onSuccess(data: ApiResponse) {
+            callback.onSuccess(data)
+        }
+
+        override fun onFailed(errorMessage: String?) {
+            callback.onFailed(errorMessage)
+        }
+
+
+    })
+
+
+}
+    fun getUserProfile(MA_Nrp:Int, callback: RemoteDataCallback) {
+        // handle login
+
+        dataSource.getUserProfile(MA_Nrp, object : RemoteDataCallback {
+            override fun onSuccess(data: ApiResponse) {
+                callback.onSuccess(data)
+                data.loggedInUser?.get(0)?.let { setLoggedInUser(it) }
+            }
+
+            override fun onFailed(errorMessage: String?) {
+                callback.onFailed(errorMessage)
+            }
+
+
+        })
+    }
+
 }

@@ -17,6 +17,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.siapitk.MainActivity
 import com.example.siapitk.R
+import com.example.siapitk.ResetPasswordActivity
+
+import kotlinx.android.synthetic.main.activity_login.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -26,9 +29,15 @@ class LoginActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme_NoActionBar_StatusBarGrey)
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_login)
+        btn_reset_password.setOnClickListener {
+
+            startActivity(Intent(this,ResetPasswordActivity::class.java))
+
+        }
+
 
         val username = findViewById<EditText>(R.id.username)
         val password = findViewById<EditText>(R.id.password)
@@ -42,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(application))
             .get(LoginViewModel::class.java)
 
+    loginViewModel.haslogin()
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
@@ -59,16 +69,22 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
 
-            loading.visibility = View.GONE
+            loading.visibility = View.INVISIBLE
+            login.visibility=View.VISIBLE
+            btn_reset_password.visibility=View.VISIBLE
             if (loginResult.error != null) {
+                login.isEnabled=true
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
-                startActivity(Intent(this,MainActivity::class.java))
+                login.isEnabled=true
+                finish()
+                startActivity(Intent(this, MainActivity::class.java))
+
             }
             setResult(Activity.RESULT_OK)
-            finish()
+
         })
 
         username.afterTextChanged {
@@ -100,11 +116,15 @@ class LoginActivity : AppCompatActivity() {
 
             login.setOnClickListener {
                 loading.visibility = View.VISIBLE
+                login.isEnabled=false
                 loginViewModel.login(username.text.toString(), password.text.toString(), androidId)
             }
         }
 
+
     }
+
+
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
@@ -138,6 +158,7 @@ class LoginActivity : AppCompatActivity() {
 
 
     }
+
 }
 
 

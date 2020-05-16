@@ -1,15 +1,17 @@
 package com.example.siapitk.ui.login
 
 import ApiResponse
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.siapitk.R
-import com.example.siapitk.data.GetListUsersCallback
 import com.example.siapitk.data.LoginRepository
+import com.example.siapitk.data.RemoteDataCallback
+import com.example.siapitk.data.model.LoggedInUser
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(private val repository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -17,10 +19,20 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String, imei:String) {
+    val _resetPasswordNotification = MutableLiveData<ApiResponse>()
+
+    val userProfile = MutableLiveData<LoggedInUser>()
+
+    fun  haslogin(){
+
+        _loginResult.value= LoginResult(success = repository.getLoggedInUser()?.let { LoggedInUserView(displayName = it) })
+    }
+
+
+    fun login(username: String, password: String, imei: String) {
         // can be launched in a separate asynchronous job
 
-        loginRepository.login(username, password, imei, object : GetListUsersCallback {
+        repository.login(username, password, imei, object : RemoteDataCallback {
             override fun onSuccess(data: ApiResponse) {
                 var loggedInUser = data.loggedInUser?.get(0)
 
@@ -37,7 +49,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
             }
 
             override fun onFailed(errorMessage: String?) {
-                TODO("Not yet implemented")
+                _loginResult.value = LoginResult(error = errorMessage)
             }
 
         })
@@ -67,5 +79,31 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
+    }
+
+    fun ResetPassword(email: String) {
+
+        repository.ResetPassword(email, object : RemoteDataCallback {
+            override fun onSuccess(data: ApiResponse) {
+                _resetPasswordNotification.value = data
+            }
+
+            override fun onFailed(errorMessage: String?) {
+
+                Log.d("EROR",errorMessage)
+            }
+        })
+    }
+
+    fun getUserProfile(MA_Nrp: Int) {
+        repository.getUserProfile(MA_Nrp, object : RemoteDataCallback {
+            override fun onSuccess(data: ApiResponse) {
+            userProfile.value= data.loggedInUser?.get(0)
+            }
+
+            override fun onFailed(errorMessage: String?) {
+
+            }
+        })
     }
 }

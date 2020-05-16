@@ -1,26 +1,71 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scanner_dialog"
     android:layout_width="match_parent"
+    android:layout_marginHorizontal="24dp"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="#FFFFFF"
+        android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginTop="24dp"
         android:paddingTop="10dp">
 
-        <TextView
-            android:id="@+id/validation_messege"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="10dp"
-            tools:text="Presensi Telah di Blokir"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dialog_slide_bar"
+            android:tint="#EFEFF4"/>
+
+        <ImageView
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/warning_notification"
+            android:layout_marginTop="47dp"
+            android:layout_marginBottom="43dp"
+           />
+
+
+        <TextView
+        android:id="@+id/validation_messege"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:fontFamily="@font/sf_pro_regular"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        tools:text="Presensi Telah di Blokir"
+        android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+           android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/sf_pro_regular"
+            android:gravity="center_horizontal"
+            android:text="Terjadi kesalahan, lakukan pindai kode QR ulang  untuk melakukan presensi"
             android:textSize="14dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_notification_rescan"
+            app:backgroundTint="#097BBC"
+            android:layout_width="match_parent"
+            android:textAllCaps="false"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center"
+            android:text="Pindai Ulang"
+            android:fontFamily="@font/sf_pro_regular"
+            android:textSize="16dp"
+
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

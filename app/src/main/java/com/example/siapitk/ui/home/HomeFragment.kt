@@ -1,24 +1,29 @@
 package com.example.siapitk.ui.home
 
-import ApiViewModel
-import Kelas
+import HomeViewModel
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.siapitk.R
+import com.example.siapitk.data.localDataSource.LoginPreferences
+import com.example.siapitk.service.AlarmService
 import com.example.siapitk.ui.KelasAdapter
+import com.example.siapitk.ui.login.HomeViewModelFactory
+import kotlin.math.log
 
 
 class HomeFragment : Fragment() {
-    lateinit var adapter: KelasAdapter
-    lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: KelasAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,27 +39,30 @@ class HomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showData(PreferenceManager.getDefaultSharedPreferences(context).getInt("MA_Nrp", 0))
+
+         viewModel = ViewModelProviders.of(this,
+            activity?.application?.let { HomeViewModelFactory(it) }).get(HomeViewModel::class.java)
+        viewModel.kelas.observe(this, Observer { t ->
+            t?.let {
+                it.kelasList?.let { it1 -> adapter.setListKelas(it1) }
+            }
+        })
+        activity?.application?.let { LoginPreferences(it).getLoggedInUser()?.MA_Nrp }?.let {
+            Log.d("TAG",LoginPreferences(activity!!.application).getLoggedInUser().toString())
+            showData(
+                it
+            )
+        }
     }
 
 
     private fun initRecyclerView() {
-
         adapter = activity?.let { KelasAdapter(it) }!!
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = adapter
-
     }
 
     private fun showData(MA_Nrp: Int) {
-        val apiRequetsViewModel = ViewModelProviders.of(this).get(ApiViewModel::class.java)
-        apiRequetsViewModel.getKelas(MA_Nrp).observe(this, Observer<ArrayList<Kelas>> { t ->
-
-            t?.let {
-                adapter.setListKelas(it)
-            }
-        })
-
-
+        viewModel.getKelas(MA_Nrp)
     }
 }
